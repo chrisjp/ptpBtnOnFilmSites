@@ -6,5 +6,5 @@ Most popular userscript managers such as Tampermonkey or Greasemonkey will promp
 
 ### Example
 
-![Screenshot](https://i.imgur.com/zwvjJoS.png)
+![PTP Button Screenshot](https://i.imgur.com/4dJmsxg.png)
 
