@@ -1,12 +1,10 @@
 // ==UserScript==
 // @name         PTP button on other film sites
-// @version      1.1
+// @version      1.1.1
 // @namespace    https://github.com/chrisjp
 // @description  Adds a button linking to a PTP search for the film on various websites like IMDb, TMDB, Letterboxd, Trakt...
 // @license      MIT
 // @icon         https://www.google.com/s2/favicons?sz=32&domain=https://passthepopcorn.me
-// @updateURL    https://raw.githubusercontent.com/chrisjp/ptpBtnOnFilmSites/master/PTP%20button%20on%20other%20film%20sites.user.js
-// @downloadURL  https://raw.githubusercontent.com/chrisjp/ptpBtnOnFilmSites/master/PTP%20button%20on%20other%20film%20sites.user.js
 // @homepageURL  https://github.com/chrisjp/ptpBtnOnFilmSites
 // @supportURL   https://github.com/chrisjp/ptpBtnOnFilmSites/issues
 // @match        https://*.imdb.com/title/tt*
@@ -22,6 +20,8 @@
 // @grant        GM.addStyle
 // @run-at       document-end
 // @noframes
+// @downloadURL https://update.greasyfork.org/scripts/452640/PTP%20button%20on%20other%20film%20sites.user.js
+// @updateURL https://update.greasyfork.org/scripts/452640/PTP%20button%20on%20other%20film%20sites.meta.js
 // ==/UserScript==
 
 (function() {
@@ -149,8 +149,8 @@ function addPtpToLetterboxd()
     let imdbButton = document.querySelector('[data-track-action="IMDb"]');
     if (imdbButton) imdbId = imdbButton.href.match('http://www.imdb.com/title/\(.*\)/maindetails')[1];
     // Get the film title too so we can fall back to it
-    let filmTitle = document.querySelector('h1.headline-1.js-widont.prettify').innerText;
-    let filmYear = document.querySelector('small.number a').innerText;
+    let filmTitle = document.querySelector('h1.headline-1.filmtitle').innerText;
+    let filmYear = document.querySelector('div.releaseyear').innerText;
 
     // Encode the search string if no IMDb ID
     let searchStr = imdbId;
