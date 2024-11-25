@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         PTP button on other film sites
-// @version      1.1.1
+// @version      1.1.2
 // @namespace    https://github.com/chrisjp
-// @description  Adds a button linking to a PTP search for the film on various websites like IMDb, TMDB, Letterboxd, Trakt...
+// @description  Adds a button linking to a PTP search for the film on websites including IMDb, TMDB, Letterboxd, and Trakt.
 // @license      MIT
 // @icon         https://www.google.com/s2/favicons?sz=32&domain=https://passthepopcorn.me
 // @homepageURL  https://github.com/chrisjp/ptpBtnOnFilmSites
@@ -20,8 +20,8 @@
 // @grant        GM.addStyle
 // @run-at       document-end
 // @noframes
-// @downloadURL https://update.greasyfork.org/scripts/452640/PTP%20button%20on%20other%20film%20sites.user.js
-// @updateURL https://update.greasyfork.org/scripts/452640/PTP%20button%20on%20other%20film%20sites.meta.js
+// @downloadURL  https://update.greasyfork.org/scripts/452640/PTP%20button%20on%20other%20film%20sites.user.js
+// @updateURL    https://update.greasyfork.org/scripts/452640/PTP%20button%20on%20other%20film%20sites.meta.js
 // ==/UserScript==
 
 (function() {
@@ -32,7 +32,7 @@
     let imdbId = null;
     //console.log(`Domain: ${domain}`);
 
-    if (domain === "imdb.com") {
+    if (domain === "imdb.com" || domain === "m.imdb.com") {
         addPtpToImdb();
     }
     else if (domain === "letterboxd.com") {
