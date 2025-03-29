@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         PTP button on other film sites
-// @version      1.1.2
+// @version      1.1.3
 // @namespace    https://github.com/chrisjp
 // @description  Adds a button linking to a PTP search for the film on websites including IMDb, TMDB, Letterboxd, and Trakt.
 // @license      MIT
@@ -83,7 +83,7 @@ function addPtpToImdb()
 
         // If the cloned node is the IMDb aggregate rating we can simply overwrite the child elements' innerHTML
         if (ratingBarBtnPTP.dataset.testid === "hero-rating-bar__aggregate-rating") {
-            console.log("We have a valid IMDb rating. Adding PTP button to DOM...");
+            console.log("ptpBtnOnFilmSites: We have a valid IMDb rating. Adding PTP button to DOM...");
 
             // set a.href
             let ptpElementA = ratingBarBtnPTP.children[1];
@@ -106,7 +106,7 @@ function addPtpToImdb()
         // If the cloned node is NOT the IMDb aggregate rating (it doesn't have one) it'll be the button allowing us to rate it if logged in
         // The child nodes of the <button> are very similar so we can still modify the HTML in a similar way
         else if (ratingBarBtnPTP.dataset.testid === "hero-rating-bar__user-rating") {
-            console.log("We don't have a valid IMDb rating. Adding PTP button to DOM...");
+            console.log("ptpBtnOnFilmSites: We don't have a valid IMDb rating. Adding PTP button to DOM...");
             let btnNode = ratingBarBtnPTP.children[1];
             let btnChildNode = ratingBarBtnPTP.children[1].children[0];
 
@@ -135,7 +135,7 @@ function addPtpToImdb()
         ratingBarBtns[0].parentNode.appendChild(ratingBarBtnPTP);
     }
     else {
-        console.log("No rating bar found. Film has probably not yet been released, or we're on a subpage of this film.");
+        console.log("ptpBtnOnFilmSites: No rating bar found. Film has probably not yet been released, or we're on a subpage of this film.");
     }
 
 }
@@ -143,32 +143,57 @@ function addPtpToImdb()
 // Letterboxd: Add a button linking to PTP next to the IMDb and TMDB buttons
 function addPtpToLetterboxd()
 {
-    // If the IMDb ID is given we'll use that, otherwise we'll use film title
+    // Initialize variables
     let imdbId = null;
-    // Find the .microbutton linking to the film's IMDb page so we can scrape the ID.
-    let imdbButton = document.querySelector('[data-track-action="IMDb"]');
-    if (imdbButton) imdbId = imdbButton.href.match('http://www.imdb.com/title/\(.*\)/maindetails')[1];
-    // Get the film title too so we can fall back to it
-    let filmTitle = document.querySelector('h1.headline-1.filmtitle').innerText;
-    let filmYear = document.querySelector('div.releaseyear').innerText;
+    let searchStr = null;
 
-    // Encode the search string if no IMDb ID
-    let searchStr = imdbId;
-    if (searchStr === null) {
+    // Find the .micro-button linking to the film's IMDb page so we can scrape the ID.
+    let imdbButton = document.querySelector('[data-track-action="IMDb"]');
+    if (imdbButton) {
+        imdbId = imdbButton.href.match('http://www.imdb.com/title/\(.*\)/maindetails')[1];
+    }
+    else {
+        console.log("ptpBtnOnFilmSites: Unable to retrieve IMDb ID. Falling back to using the film's title.");
+    }
+    // Get the film title too so we can fall back to it
+    let filmTitle = document.querySelector('h1.headline-1.primaryname');
+    filmTitle = filmTitle ? filmTitle.innerText : null;
+    let filmYear = document.querySelector('div.releaseyear');
+    filmYear = filmYear ? filmYear.innerText : null;
+
+    // Determine if we'll search PTP using the IMDb ID or the film title
+    if (imdbId) {
+        searchStr = imdbId;
+    }
+    else if (filmTitle) {
         searchStr = encodeURIComponent(filmTitle);
         if (filmYear > 1800) searchStr += '&year=' + filmYear;
     }
+    else {
+        console.log("ptpBtnOnFilmSites: Unable to retrieve IMDb ID or a film title to fallback to. Has the HTML or CSS class(es) changed?");
+    }
 
-    // Create an anchor element linking to the PTP search page
-    let linkPtp = document.createElement("a");
-    linkPtp.innerHTML = "PTP";
-    linkPtp.classList.add('micro-button');
-    linkPtp.href = 'https://passthepopcorn.me/torrents.php?action=advanced&searchstr=' + searchStr + '&order_by=relevance';
+    // If we have IMDb ID or title, create an anchor element linking to the PTP search page
+    if (searchStr) {
+        let linkPtp = document.createElement("a");
+        linkPtp.innerHTML = "PTP";
+        linkPtp.classList.add('micro-button');
+        linkPtp.href = 'https://passthepopcorn.me/torrents.php?action=advanced&searchstr=' + searchStr + '&order_by=relevance';
 
-    // Add the element after the existing .micro-button's
-    let microButtons = document.querySelectorAll(".micro-button");
-    microButtons[microButtons.length-1].after(linkPtp);
-    microButtons[microButtons.length-1].after("\n");
+        // Add the element after the existing .micro-button's
+        let microButtons = document.querySelectorAll(".micro-button");
+        if (microButtons) {
+            console.log("ptpBtnOnFilmSites: Adding PTP button to DOM. IMDb ID (%s), filmTitle (%s), filmYear (%s)", imdbId, filmTitle, filmYear);
+            microButtons[microButtons.length-1].after(linkPtp);
+            microButtons[microButtons.length-1].after("\n");
+        }
+        else {
+            console.log("ptpBtnOnFilmSites: Unable to add PTP button to DOM. Has the HTML or CSS class(es) changed?");
+        }
+    }
+    else {
+        console.log("ptpBtnOnFilmSites: Unable to add PTP button.");
+    }
 }
 
 // Trakt: Add a button linking to PTP with the other External Links
