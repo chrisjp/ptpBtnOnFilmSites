@@ -1,7 +1,11 @@
 # Changelog
 
+### 2025-03-29 - 1.1.3
+* Fix: Compatibility update for Letterboxd CSS change. ([#2](https://github.com/chrisjp/ptpBtnOnFilmSites/issues/2))
+* Change: Handle potential errors when attempting to add button to Letterboxd and give more helpful console logging.
+
 ### 2024-11-25 - 1.1.2
-* Fix: Compatibility - now works on IMDb mobile domain `m.imdb.com`.
+* Fix: Compatibility - now works on IMDb mobile domain `m.imdb.com`. ([#1](https://github.com/chrisjp/ptpBtnOnFilmSites/issues/1))
 
 ### 2024-05-05 - 1.1.1
 * Fix: Compatibility update for Letterboxd HTML/CSS changes.
