@@ -1,5 +1,9 @@
 # Changelog
 
+### 2025-09-27 - 1.1.4
+* Fix: Compatibility update for Trakt HTML change and IMDb URLs without a trailing slash.
+* Fix: Replaced Google Favicons API link with direct link to PTP favicon as Google no longer shows it correctly.
+
 ### 2025-03-29 - 1.1.3
 * Fix: Compatibility update for Letterboxd CSS change. ([#2](https://github.com/chrisjp/ptpBtnOnFilmSites/issues/2))
 * Change: Handle potential errors when attempting to add button to Letterboxd and give more helpful console logging.

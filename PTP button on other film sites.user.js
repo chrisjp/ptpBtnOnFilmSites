@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         PTP button on other film sites
-// @version      1.1.3
+// @version      1.1.4
 // @namespace    https://github.com/chrisjp
 // @description  Adds a button linking to a PTP search for the film on websites including IMDb, TMDB, Letterboxd, and Trakt.
 // @license      MIT
-// @icon         https://www.google.com/s2/favicons?sz=32&domain=https://passthepopcorn.me
+// @icon         https://passthepopcorn.me/static/common/touch-icon-iphone-retina.png
 // @homepageURL  https://github.com/chrisjp/ptpBtnOnFilmSites
 // @supportURL   https://github.com/chrisjp/ptpBtnOnFilmSites/issues
 // @match        https://*.imdb.com/title/tt*
@@ -57,7 +57,7 @@ function addPtpToImdb()
     let filmHasYourRating = document.querySelector('[data-testid="hero-rating-bar__user-rating"]');
 
     // Get IMDb ID from the URL
-    let imdbId = document.URL.match(/\/tt([0-9]+)\//)[1];
+    let imdbId = document.URL.match(/\/tt([0-9]+)\/?/)[1];
     if (imdbId > 0 && (filmHasAggRating !== null || filmHasYourRating !== null)) {
         // Since a lot of relevant class names are random... Basically we:
         // 1. get the div.rating-bar__base-button elements
@@ -92,11 +92,11 @@ function addPtpToImdb()
             // edit all its child elements
             let ptpElementADiv = ptpElementA.children[0].children[0];
             // icon set to 24x24
-            ptpElementADiv.children[0].innerHTML = '<img src="https://www.google.com/s2/favicons?sz=64&domain=https://passthepopcorn.me" alt="" width="24" height="24">';
+            ptpElementADiv.children[0].innerHTML = '<img src="https://passthepopcorn.me/static/common/touch-icon-iphone-retina.png" alt="" width="24" height="24">';
             // ratings data
             let ptpElementDiv = ptpElementADiv.children[1];
             // average rating
-            ptpElementDiv.children[0].children[0].innerHTML = "\uD83D\uDD0E";
+            ptpElementDiv.children[0].children[0].innerHTML = "\uD83D\uDD0E"; // magnifying glass emoji
             ptpElementDiv.children[0].children[1].remove();
             // total ratings
             ptpElementDiv.children[2].remove();
@@ -120,7 +120,7 @@ function addPtpToImdb()
             // edit all its child elements
             let ptpElementADiv = ptpElementA.children[0].children[0];
             // icon set to 24x24
-            ptpElementADiv.children[0].innerHTML = '<img src="https://www.google.com/s2/favicons?sz=64&domain=passthepopcorn.me" alt="" width="24" height="24">';
+            ptpElementADiv.children[0].innerHTML = '<img src="https://passthepopcorn.me/static/common/touch-icon-iphone-retina.png" alt="" width="24" height="24">';
             // ratings data container
             let ptpElementDiv = ptpElementADiv.children[1];
             // average rating
@@ -203,7 +203,7 @@ function addPtpToTrakt()
     let imdbId = null;
     // Find the button linking to the film's IMDb page so we can scrape the ID.
     let imdbButton = document.querySelector('#external-link-imdb');
-    if (imdbButton) imdbId = imdbButton.href.match('http://www.imdb.com/title/\(.*\)')[1];
+    if (imdbButton) imdbId = imdbButton.href.match('imdb.com/title/\(.*\)')[1];
 
     // Get the film title too so we can fall back to it
     // There is potentially a year and a certificate rating here so we'll need to deal with those
@@ -259,7 +259,7 @@ function addPtpToTmdb()
 
     // Create an anchor element linking to the PTP search page
     let linkPtp = document.createElement("a");
-    linkPtp.innerHTML = '<img src="https://www.google.com/s2/favicons?sz=32&domain=https://passthepopcorn.me" alt="PTP" class="glyphiconimg" />';
+    linkPtp.innerHTML = '<img src="https://passthepopcorn.me/static/common/touch-icon-iphone-retina.png" alt="PTP" class="glyphiconimg" />';
     linkPtp.classList.add('social_link');
     linkPtp.title = "Search PTP";
     linkPtp.href = 'https://passthepopcorn.me/torrents.php?action=advanced&searchstr=' + searchStr + '&order_by=relevance';
