@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         PTP button on other film sites
-// @version      1.1.4
+// @version      1.1.5
 // @namespace    https://github.com/chrisjp
 // @description  Adds a button linking to a PTP search for the film on websites including IMDb, TMDB, Letterboxd, and Trakt.
 // @license      MIT
