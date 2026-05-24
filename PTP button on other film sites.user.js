@@ -158,7 +158,7 @@ function addPtpToLetterboxd()
     // Get the film title too so we can fall back to it
     let filmTitle = document.querySelector('h1.headline-1.primaryname');
     filmTitle = filmTitle ? filmTitle.innerText : null;
-    let filmYear = document.querySelector('div.releaseyear');
+    let filmYear = document.querySelector('span.releasedate');
     filmYear = filmYear ? filmYear.innerText : null;
 
     // Determine if we'll search PTP using the IMDb ID or the film title
@@ -170,25 +170,25 @@ function addPtpToLetterboxd()
         if (filmYear > 1800) searchStr += '&year=' + filmYear;
     }
     else {
-        console.log("ptpBtnOnFilmSites: Unable to retrieve IMDb ID or a film title to fallback to. Has the HTML or CSS class(es) changed?");
+        console.log("ptpBtnOnFilmSites: Unable to retrieve IMDb ID or a film title to fallback to. HTML or CSS classes may have changed.");
     }
 
     // If we have IMDb ID or title, create an anchor element linking to the PTP search page
     if (searchStr) {
         let linkPtp = document.createElement("a");
         linkPtp.innerHTML = "PTP";
-        linkPtp.classList.add('micro-button');
+        linkPtp.classList.add('micro-button', 'track-event');
         linkPtp.href = 'https://passthepopcorn.me/torrents.php?action=advanced&searchstr=' + searchStr + '&order_by=relevance';
+        linkPtp.target = '_blank';
 
-        // Add the element after the existing .micro-button's
-        let microButtons = document.querySelectorAll(".micro-button");
+        // Add the element alongside the other .micro-button's
+        let microButtons = document.querySelectorAll("a.micro-button");
         if (microButtons) {
             console.log("ptpBtnOnFilmSites: Adding PTP button to DOM. IMDb ID (%s), filmTitle (%s), filmYear (%s)", imdbId, filmTitle, filmYear);
-            microButtons[microButtons.length-1].after(linkPtp);
-            microButtons[microButtons.length-1].after("\n");
+            microButtons[0].parentNode.appendChild(linkPtp);
         }
         else {
-            console.log("ptpBtnOnFilmSites: Unable to add PTP button to DOM. Has the HTML or CSS class(es) changed?");
+            console.log("ptpBtnOnFilmSites: Unable to add PTP button to DOM. HTML or CSS classes may have changed.");
         }
     }
     else {
