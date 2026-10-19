@@ -1,28 +1,32 @@
 # Changelog
 
+### 2026-10-19 - 1.1.6
+
+* Fixed: Issue on IMDb where the PTP button was being immediately removed after being added
+
 ### 2026-05-24 - 1.1.5
 
-* Fix: Compatibility updates for Letterboxd
+* Fixed: Compatibility updates for Letterboxd
   * The HTML and CSS class for release year was changed
   * A change to the Letterboxd Extras browser addon meant that the PTP button would be removed when it adds its links to other external websites
 
 ### 2025-09-27 - 1.1.4
 
-* Fix: Compatibility update for Trakt HTML change and IMDb URLs without a trailing slash.
-* Fix: Replaced Google Favicons API link with direct link to PTP favicon as Google no longer shows it correctly.
+* Fixed: Compatibility update for Trakt HTML change and IMDb URLs without a trailing slash.
+* Fixed: Replaced Google Favicons API link with direct link to PTP favicon as Google no longer shows it correctly.
 
 ### 2025-03-29 - 1.1.3
 
-* Fix: Compatibility update for Letterboxd CSS change. ([#2](https://github.com/chrisjp/ptpBtnOnFilmSites/issues/2))
-* Change: Handle potential errors when attempting to add button to Letterboxd and give more helpful console logging.
+* Fixed: Compatibility update for Letterboxd CSS change. ([#2](https://github.com/chrisjp/ptpBtnOnFilmSites/issues/2))
+* Changed: Handle potential errors when attempting to add button to Letterboxd and give more helpful console logging.
 
 ### 2024-11-25 - 1.1.2
 
-* Fix: Compatibility - now works on IMDb mobile domain `m.imdb.com`. ([#1](https://github.com/chrisjp/ptpBtnOnFilmSites/issues/1))
+* Fixed: Compatibility - now works on IMDb mobile domain `m.imdb.com`. ([#1](https://github.com/chrisjp/ptpBtnOnFilmSites/issues/1))
 
 ### 2024-05-05 - 1.1.1
 
-* Fix: Compatibility update for Letterboxd HTML/CSS changes.
+* Fixed: Compatibility update for Letterboxd HTML/CSS changes.
 
 ### 2023-11-24 - 1.1
 
@@ -31,7 +35,7 @@
 
 ### 2022-10-08 - 1.0.1
 
-* Fix: some deprecations
+* Fixed: some deprecations
 * Change: more efficient IMDb ID scraping.
 
 ### 2021-05-30 - 1.0.0

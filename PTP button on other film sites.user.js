@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         PTP button on other film sites
-// @version      1.1.5
+// @version      1.1.6
 // @namespace    https://github.com/chrisjp
 // @description  Adds a button linking to a PTP search for the film on websites including IMDb, TMDB, Letterboxd, and Trakt.
 // @license      MIT
@@ -20,8 +20,8 @@
 // @grant        GM.addStyle
 // @run-at       document-end
 // @noframes
-// @downloadURL  https://update.greasyfork.org/scripts/452640/PTP%20button%20on%20other%20film%20sites.user.js
-// @updateURL    https://update.greasyfork.org/scripts/452640/PTP%20button%20on%20other%20film%20sites.meta.js
+// @downloadURL https://update.greasyfork.org/scripts/452640/PTP%20button%20on%20other%20film%20sites.user.js
+// @updateURL https://update.greasyfork.org/scripts/452640/PTP%20button%20on%20other%20film%20sites.meta.js
 // ==/UserScript==
 
 (function() {
@@ -83,7 +83,7 @@ function addPtpToImdb()
 
         // If the cloned node is the IMDb aggregate rating we can simply overwrite the child elements' innerHTML
         if (ratingBarBtnPTP.dataset.testid === "hero-rating-bar__aggregate-rating") {
-            console.log("ptpBtnOnFilmSites: We have a valid IMDb rating. Adding PTP button to DOM...");
+            console.log("ptpBtnOnFilmSites: We have a valid IMDb rating.");
 
             // set a.href
             let ptpElementA = ratingBarBtnPTP.children[1];
@@ -92,7 +92,7 @@ function addPtpToImdb()
             // edit all its child elements
             let ptpElementADiv = ptpElementA.children[0].children[0];
             // icon set to 24x24
-            ptpElementADiv.children[0].innerHTML = '<img src="https://passthepopcorn.me/static/common/touch-icon-iphone-retina.png" alt="" width="24" height="24">';
+            ptpElementADiv.children[0].innerHTML = '<img src="https://passthepopcorn.me/static/common/touch-icon-iphone-retina.png" alt="PTP icon" width="24" height="24">';
             // ratings data
             let ptpElementDiv = ptpElementADiv.children[1];
             // average rating
@@ -101,12 +101,12 @@ function addPtpToImdb()
             // total ratings
             ptpElementDiv.children[2].remove();
             // data-testid
-            ptpElementDiv.children[0].dataset.testid = "hero-rating-bar__ptp-button";
+            ptpElementDiv.children[0].dataset.testid = "";
         }
         // If the cloned node is NOT the IMDb aggregate rating (it doesn't have one) it'll be the button allowing us to rate it if logged in
         // The child nodes of the <button> are very similar so we can still modify the HTML in a similar way
         else if (ratingBarBtnPTP.dataset.testid === "hero-rating-bar__user-rating") {
-            console.log("ptpBtnOnFilmSites: We don't have a valid IMDb rating. Adding PTP button to DOM...");
+            console.log("ptpBtnOnFilmSites: We don't have a valid IMDb rating.");
             let btnNode = ratingBarBtnPTP.children[1];
             let btnChildNode = ratingBarBtnPTP.children[1].children[0];
 
@@ -120,7 +120,7 @@ function addPtpToImdb()
             // edit all its child elements
             let ptpElementADiv = ptpElementA.children[0].children[0];
             // icon set to 24x24
-            ptpElementADiv.children[0].innerHTML = '<img src="https://passthepopcorn.me/static/common/touch-icon-iphone-retina.png" alt="" width="24" height="24">';
+            ptpElementADiv.children[0].innerHTML = '<img src="https://passthepopcorn.me/static/common/touch-icon-iphone-retina.png" alt="PTP icon" width="24" height="24">';
             // ratings data container
             let ptpElementDiv = ptpElementADiv.children[1];
             // average rating
@@ -130,14 +130,35 @@ function addPtpToImdb()
             btnNode.replaceWith(ptpElementA);
         }
 
-        // Add the finished element to the DOM
+        // Change the testid
         ratingBarBtnPTP.dataset.testid = "hero-rating-bar__ptp-button";
-        ratingBarBtns[0].parentNode.appendChild(ratingBarBtnPTP);
+
+        // Add the finished element to the DOM
+        // The <div> we add this to gets completely recreated by React,
+        // This will mean the button disappears if it gets added before this happens (almost always the case)
+        // To workaround this, we can attach a MutationObserver to the document.body to watch for changes
+        // After they happen, we add the button (again) if it's not found.
+        const obsconfig = { childList: true, subtree: true }
+        const callback = () => {
+            observer.disconnect();
+
+            // Find our button
+            const ourPtpBtn = document.querySelector('[data-testid="hero-rating-bar__ptp-button"]');
+            if (!ourPtpBtn) {
+              // Add it to the DOM
+              console.log("ptpBtnOnFilmSites: Adding PTP button to the DOM.");
+              document.querySelectorAll(".rating-bar__base-button")[0].parentNode.appendChild(ratingBarBtnPTP);
+            }
+
+            observer.observe(document.body, obsconfig);
+        }
+
+        const observer = new MutationObserver(callback)
+        callback();
     }
     else {
         console.log("ptpBtnOnFilmSites: No rating bar found. Film has probably not yet been released, or we're on a subpage of this film.");
     }
-
 }
 
 // Letterboxd: Add a button linking to PTP next to the IMDb and TMDB buttons
